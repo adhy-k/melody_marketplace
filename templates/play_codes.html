@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+        min-height: 100vh;
+        animation: bg-move 16s ease-in-out infinite alternate;
+    }
+    .play-codes-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 70vh;
+    }
+    .play-codes-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #764ba2;
+        margin-bottom: 1.5rem;
+    }
+    .play-codes-info {
+        font-size: 1.15rem;
+        color: #185a9d;
+        margin-bottom: 2rem;
+        font-weight: 500;
+    }
+    .key-hint {
+        display: inline-block;
+        background: #fff;
+        color: #764ba2;
+        border-radius: 10px;
+        padding: 0.3rem 1rem;
+        margin: 0.2rem 0.4rem;
+        font-size: 1.2rem;
+        box-shadow: 0 2px 10px 0 rgba(31, 38, 135, 0.08);
+        font-weight: 600;
+    }
+</style>
+<div class="play-codes-container">
+    <div class="play-codes-title">Play Codes 🎹</div>
+    <div class="play-codes-info">
+        Press the keys
+        <span class="key-hint">A</span>
+        <span class="key-hint">W</span>
+        <span class="key-hint">S</span>
+        <span class="key-hint">E</span>
+        <span class="key-hint">D</span>
+        <span class="key-hint">F</span>
+        <span class="key-hint">T</span>
+        <span class="key-hint">G</span>
+        <span class="key-hint">Y</span>
+        <span class="key-hint">H</span>
+        <span class="key-hint">U</span>
+        <span class="key-hint">J</span>
+        on your keyboard to play piano notes!
+        <div style="margin-top:0.8rem; font-size:1.3rem; color:#764ba2; font-weight:600;">
+            (A: C, W: C#, S: D, E: D#, D: E, F: F, T: F#, G: G, Y: G#, H: A, U: A#, J: B)
+        </div>
+    </div>
+    <div id="note-played" style="font-size:1.5rem;font-weight:700;color:#43cea2;margin-top:1.5rem;"></div>
+</div>
+<script>
+const keyToNote = {
+    'a': { note: 'C', freq: 261.63 },
+    'w': { note: 'C#', freq: 277.18 },
+    's': { note: 'D', freq: 293.66 },
+    'e': { note: 'D#', freq: 311.13 },
+    'd': { note: 'E', freq: 329.63 },
+    'f': { note: 'F', freq: 349.23 },
+    't': { note: 'F#', freq: 369.99 },
+    'g': { note: 'G', freq: 392.00 },
+    'y': { note: 'G#', freq: 415.30 },
+    'h': { note: 'A', freq: 440.00 },
+    'u': { note: 'A#', freq: 466.16 },
+    'j': { note: 'B', freq: 493.88 }
+};
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+function playNote(freq) {
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+    oscillator.type = 'sine';
+    oscillator.frequency.value = freq;
+    gain.gain.value = 0.2;
+    oscillator.start();
+    setTimeout(() => {
+        oscillator.stop();
+    }, 350);
+}
+document.addEventListener('keydown', function(e) {
+    const key = e.key.toLowerCase();
+    if (keyToNote[key]) {
+        playNote(keyToNote[key].freq);
+        document.getElementById('note-played').innerText = `Played: ${keyToNote[key].note}`;
+    }
+});
+</script>
+{% endblock %}

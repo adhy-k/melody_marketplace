@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+        min-height: 100vh;
+        animation: bg-move 16s ease-in-out infinite alternate;
+    }
+    @keyframes bg-move {
+        0% {
+            background-position: 0% 50%;
+        }
+        100% {
+            background-position: 100% 50%;
+        }
+    }
+    .melody-detail-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        padding: 2.5rem 2.5rem 2rem 2.5rem;
+        max-width: 650px;
+        margin: 60px auto 30px auto;
+        text-align: center;
+    }
+    .melody-detail-card h1 {
+        color: #764ba2;
+        font-weight: 800;
+        margin-bottom: 1rem;
+    }
+    .melody-detail-card h6 {
+        color: #185a9d;
+        font-weight: 600;
+    }
+    .melody-detail-card .btn-primary {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        padding: 0.5rem 1.5rem;
+        font-size: 1.05rem;
+    }
+    .melody-detail-card .btn-success {
+        background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        padding: 0.5rem 1.5rem;
+        font-size: 1.05rem;
+    }
+    .melody-detail-card .btn-secondary {
+        border-radius: 25px;
+        font-weight: 600;
+        margin-left: 10px;
+    }
+    .melody-player {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 14px;
+        margin: 20px 0;
+        box-shadow: 0 2px 10px 0 rgba(31, 38, 135, 0.05);
+    }
+    .melody-notes {
+        font-family: monospace;
+        font-size: 1.3em;
+        letter-spacing: 2px;
+        color: #667eea;
+        margin-bottom: 8px;
+    }
+</style>
+<div class="melody-detail-card">
+    <h1 class="card-title">{{ melody.title }}</h1>
+    <h6 class="card-subtitle mb-3 text-muted">Created by {{ melody.creator.username }}</h6>
+    <p class="card-text">{{ melody.description }}</p>
+    <p class="card-text"><strong>Price: <span style="font-family:Arial;font-weight:bold;">&#8377;</span>{{ melody.price }}</strong></p>
+    {% if is_owner or has_purchased %}
+    <div class="melody-player mb-4">
+        <h4>Melody Notes</h4>
+        <p class="melody-notes">{{ melody.notes }}</p>
+        <button class="btn btn-primary" onclick="playMelody('{{ melody.notes }}')">Play Melody</button>
+    </div>
+    {% endif %}
+    {% if user.is_authenticated and not is_owner and not has_purchased %}
+    <form action="{% url 'purchase_melody' melody.pk %}" method="post" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Purchase Melody</button>
+    </form>
+    {% endif %}
+    <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+</div>
+<script>
+// Simple synthesizer setup
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+const noteFrequencies = {
+    'C': 261.63,
+    'D': 293.66,
+    'E': 329.63,
+    'F': 349.23,
+    'G': 392.00,
+    'A': 440.00,
+    'B': 493.88
+};
+function playNote(frequency, duration) {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    oscillator.type = 'sine';
+    oscillator.frequency.value = frequency;
+    gainNode.gain.value = 0.2;
+    oscillator.start();
+    setTimeout(() => {
+        oscillator.stop();
+    }, duration);
+}
+function playMelody(melodyString) {
+    const notes = melodyString.trim().split(/\s+/);
+    let delay = 0;
+    notes.forEach(note => {
+        const n = note.toUpperCase();
+        if (noteFrequencies[n]) {
+            setTimeout(() => playNote(noteFrequencies[n], 350), delay);
+            delay += 400;
+        }
+    });
+}
+</script>
+{% endblock %}

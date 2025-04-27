@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <!-- Floating Music Symbols and Emojis in the background -->
+  <div id="floating-notes-bg" style="position:fixed; width:100vw; height:100vh; top:0; left:0; pointer-events:none; z-index:0; overflow:hidden;">
+    <div class="note" style="left:6%; animation-duration:12s;">𝄞</div>
+    <div class="note" style="left:12%; animation-duration:13s;">🎶</div>
+    <div class="note" style="left:18%; animation-duration:10s;">𝄫</div>
+    <div class="note" style="left:24%; animation-duration:14s;">🎵</div>
+    <div class="note" style="left:30%; animation-duration:11s;">𝄪</div>
+    <div class="note" style="left:36%; animation-duration:9s;">🎷</div>
+    <div class="note" style="left:42%; animation-duration:12s;">𝄢</div>
+    <div class="note" style="left:48%; animation-duration:15s;">🎸</div>
+    <div class="note" style="left:54%; animation-duration:11s;">𝄞</div>
+    <div class="note" style="left:60%; animation-duration:13s;">🎺</div>
+    <div class="note" style="left:66%; animation-duration:10s;">𝄫</div>
+    <div class="note" style="left:72%; animation-duration:14s;">🎻</div>
+    <div class="note" style="left:78%; animation-duration:12s;">𝄪</div>
+    <div class="note" style="left:84%; animation-duration:13s;">🎤</div>
+    <div class="note" style="left:90%; animation-duration:10s;">𝄢</div>
+    <div class="note" style="left:96%; animation-duration:15s;">🎧</div>
+  </div>
+  <style>
+    .note {
+      position: absolute;
+      color: white;
+      font-size: 2.8rem;
+      opacity: 0.18;
+      pointer-events: none;
+      animation: floatUp 10s linear infinite;
+      z-index: 0;
+    }
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) translateX(20px);
+        opacity: 0;
+      }
+    }
+  </style>
+  <style>
+    .music-notes {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 0;
+      width: 100%;
+      opacity: 0.18;
+      font-size: 5rem;
+      pointer-events: none;
+      text-align: center;
+      animation: notes-float 7s ease-in-out infinite alternate;
+    }
+    @keyframes notes-float {
+      0% {
+        transform: translateY(0px) scale(1);
+      }
+      50% {
+        transform: translateY(-20px) scale(1.04) rotate(-4deg);
+      }
+      100% {
+        transform: translateY(0px) scale(1);
+      }
+    }
+  </style>
+  <style>
+    body {
+        background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+        background-size: 400% 400%;
+        animation: gradientMove 20s ease infinite;
+        font-family: 'Poppins', sans-serif;
+        min-height: 100vh;
+    }
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .music-hero {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border-radius: 20px;
+        padding: 2.5rem 2rem 2rem 2rem;
+        margin-bottom: 2.5rem;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .music-hero h1 {
+        font-size: 2.7rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        margin-bottom: 0.7rem;
+    }
+    .music-hero p {
+        font-size: 1.3rem;
+        font-weight: 400;
+        margin-bottom: 1.3rem;
+    }
+    .note {
+      position: absolute;
+      color: white;
+      font-size: 24px;
+      opacity: 0.7;
+      animation: floatUp 10s linear infinite;
+    }
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) translateX(20px);
+        opacity: 0;
+      }
+    }
+    .melody-card-custom {
+        border-radius: 15px;
+        box-shadow: 0 4px 20px 0 rgba(118, 75, 162, 0.12);
+        border: none;
+        transition: transform 0.14s;
+        min-height: 220px;
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
+    }
+    .melody-card-custom .card-body {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .melody-card-custom:hover {
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 8px 32px 0 rgba(118, 75, 162, 0.18);
+    }
+    .melody-card-custom .btn-primary {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        padding: 0.5rem 1.5rem;
+        font-size: 1.05rem;
+    }
+</style>
+<div class="music-hero" style="position:relative;">
+    <h1>Welcome to Melody Marketplace <span style="font-size:2.2rem;">&#127925;</span></h1>
+    <p>Discover, create, and purchase unique melodies.<br>Let your musical journey begin!</p>
+    <div class="music-notes">𝄞 𝄫 𝄪 𝄢 𝄞 𝄫 𝄪 𝄢</div>
+    {% if user.is_authenticated %}
+    <a href="{% url 'play_codes' %}" class="btn btn-primary btn-lg mt-3" style="font-weight:700;letter-spacing:1px;background:linear-gradient(90deg,#667eea 0%,#764ba2 100%);border:none;border-radius:25px;box-shadow:0 4px 20px 0 rgba(118,75,162,0.12);">
+        <span style="font-size:1.3rem;">🎹</span> Play Codes
+    </a>
+    {% endif %}
+</div>
+<div class="row">
+    {% for melody in melodies %}
+    <div class="col-md-6 mb-4">
+        <div class="card melody-card-custom">
+            <div class="card-body">
+                <h5 class="card-title" style="color:#764ba2;font-weight:700;">{{ melody.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">By {{ melody.creator.username }}</h6>
+                <p class="card-text">{{ melody.description|truncatewords:30 }}</p>
+                <p class="card-text"><strong>Price: <span style="font-family:Arial;font-weight:bold;">&#8377;</span>{{ melody.price }}</strong></p>
+                <a href="{% url 'melody_detail' melody.pk %}" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <p>No melodies available yet.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<footer class="mt-5" style="background:rgba(255,255,255,0.08);color:#fff;padding:32px 0 18px 0;box-shadow:0 -2px 20px 0 rgba(24,90,157,0.10);border-top-left-radius: 38px;border-top-right-radius: 38px;backdrop-filter: blur(6px);">
+    <div class="container text-center">
+        <div class="mb-3">
+            <span style="font-size:2rem;margin:0 12px;"><i class="bi bi-instagram"></i></span>
+            <span style="font-size:2rem;margin:0 12px;"><i class="bi bi-facebook"></i></span>
+            <span style="font-size:2rem;margin:0 12px;"><i class="bi bi-whatsapp"></i></span>
+        </div>
+        <div style="font-size:1.08rem;font-weight:500;">
+            Fisat Hormis Nagar, Mookkannoor, Angamaly, Kerala 683577
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap Icons CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+{% endblock %}

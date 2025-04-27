@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <style>
+    /* Login page styles only */
+    body {
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      background-size: 400% 400%;
+      animation: gradientMove 20s ease infinite;
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+      min-height: 100vh;
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .note {
+      position: absolute;
+      color: white;
+      font-size: 24px;
+      opacity: 0.7;
+      animation: floatUp 10s linear infinite;
+    }
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) translateX(20px);
+        opacity: 0;
+      }
+    }
+    .login-container {
+      margin-top: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 70vh;
+      position: relative;
+      z-index: 2;
+    }
+    .login-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 40px 30px;
+      width: 360px;
+      text-align: center;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(255, 110, 196, 0.4), 0 0 40px rgba(120, 115, 245, 0.2);
+    }
+    .login-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: 'Caveat', cursive;
+      font-size: 42px;
+      margin-bottom: 25px;
+      color: #ff99cc;
+    }
+    .login-title span {
+      animation: bounce 1.5s infinite;
+      font-size: 32px;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .input-field {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    .input-field:focus {
+      background: rgba(255, 255, 255, 0.25);
+      outline: none;
+      box-shadow: 0 0 10px #ff6ec4;
+    }
+    .input-field::placeholder {
+      color: #ccc;
+    }
+    .button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      background: linear-gradient(90deg, #ff6ec4, #7873f5);
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      transition: 0.4s;
+    }
+    .button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #ff6ec4, 0 0 20px #7873f5;
+    }
+    a {
+      display: block;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #ccc;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    a:hover {
+      color: #ff6ec4;
+    }
+  </style>
+  <!-- Floating Music Notes -->
+  <div class="note" style="left:10%; animation-duration:12s;">🎶</div>
+  <div class="note" style="left:20%; animation-duration:10s;">🎵</div>
+  <div class="note" style="left:30%; animation-duration:14s;">🎼</div>
+  <div class="note" style="left:40%; animation-duration:9s;">🎶</div>
+  <div class="note" style="left:50%; animation-duration:11s;">🎧</div>
+  <div class="note" style="left:60%; animation-duration:13s;">🎵</div>
+  <div class="note" style="left:70%; animation-duration:10s;">🎶</div>
+  <div class="note" style="left:80%; animation-duration:12s;">🎷</div>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-title">
+        Login<span>🎶</span>
+      </div>
+      <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+        <input class="input-field" type="text" name="username" placeholder="Username" required autofocus>
+        <input class="input-field" type="password" name="password" placeholder="Password" required>
+        <button class="button" type="submit">Login</button>
+        <a href="{% url 'register' %}">Don't have an account? Sign Up</a>
+      </form>
+    </div>
+  </div>
+{% endblock %}
